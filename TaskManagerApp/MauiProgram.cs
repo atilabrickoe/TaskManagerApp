@@ -30,8 +30,10 @@ namespace TaskManagerApp
             builder.Services.AddScoped<IUserService, UserService>();
 
             // Register view + viewmodel
-            builder.Services.AddTransient<CreateUserPage>();
+            //builder.Services.AddTransient<CreateUserPage>();
+            //builder.Services.AddTransient<UserTaskManagerPage>();
             builder.Services.AddTransient<CreateUserViewModel>();
+            builder.Services.AddTransient<UserTaskManagerViewModel>();
             builder.Services.AddTransient<INavigationService, NavigationService>();
             builder.Services.AddTransient(typeof(IHandleApiResponseService<>), typeof(HandleApiResponseService<>));
 

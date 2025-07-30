@@ -9,6 +9,6 @@ namespace TaskManagerApp.Services
     public interface IApiService
     {
         Task<HttpResponseMessage> PostRequest(string uri, HttpContent content);
-        Task<HttpResponseMessage> GetRequest(string uri, Dictionary<string, string>? queryParams = null);
+        Task<HttpResponseMessage> GetRequest(string uriWithParans);
     }
 }

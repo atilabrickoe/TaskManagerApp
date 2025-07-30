@@ -7,5 +7,6 @@ namespace TaskManagerApp.Services
     {
         Task<Response<Token>?> LoginAsync(string username, string password);
         Task<Response<User>?> CreateUserAsync(string username, string password);
+        Task<Response<List<User>>> GetAllUsers(bool withTask);
     }
 }

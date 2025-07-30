@@ -29,15 +29,25 @@ namespace TaskManagerApp.Services
             return await handler.HandleAsync(httpResponse);
         }
 
-        protected async Task<Response<T?>> GetAndHandleAsync<T>(
-            string endpoint,
-            IHandleApiResponseService<T> handler) where T : Response<T>, new()
+        protected async Task<Response<T>> GetAndHandleAsync<T>(string endpoint, 
+                                                                IHandleApiResponseService<T> handler, 
+                                                                List<string>? queryParams = null)
         {
+            if (queryParams is not null && queryParams.Count > 0)
+            {
+                foreach (string param in queryParams)
+                {
+                    endpoint += $"/{param}";
+                }
+
+            }
+
             var httpResponse = await _apiService.GetRequest(endpoint);
 
             var result = await handler.HandleAsync(httpResponse);
 
             return result;
         }
+
     }
 }

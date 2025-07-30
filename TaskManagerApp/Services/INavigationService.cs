@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TaskManagerApp.Services
+﻿namespace TaskManagerApp.Services
 {
     public interface INavigationService
     {
-        Task PushAsync(Page page);
+        Task NavigationTO(string route);
     }
 }

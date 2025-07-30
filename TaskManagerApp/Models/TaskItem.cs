@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace TaskManagerApp.Models
 {
-    internal class TaskItem
+    public class TaskItem
     {
+        public Guid Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public Guid IdUser { get; set; }
+        public string UserName { get; set; } = string.Empty;
+        public DateTime DueDate { get; set; }
     }
 }

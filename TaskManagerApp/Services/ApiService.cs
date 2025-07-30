@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace TaskManagerApp.Services
@@ -22,6 +24,14 @@ namespace TaskManagerApp.Services
             var urlAdress = BaseUrl + uri;
             try
             {
+                var token = await SecureStorage.GetAsync("access_token");
+
+                if (!string.IsNullOrWhiteSpace(token))
+                {
+                    _httpClient.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue("Bearer", token);
+                }
+
                 return await _httpClient.PostAsync(urlAdress, content);
             }
             catch (Exception ex)
@@ -31,22 +41,20 @@ namespace TaskManagerApp.Services
             }
         }
 
-        public async Task<HttpResponseMessage> GetRequest(string uri, Dictionary<string, string>? queryParams = null)
+        public async Task<HttpResponseMessage> GetRequest(string uriWithParans)
         {
-            var urlBuilder = new StringBuilder();
-            urlBuilder.Append(BaseUrl.TrimEnd('/'))
-                      .Append('/')
-                      .Append(uri.TrimStart('/'));
-
-            if (queryParams != null && queryParams.Count > 0)
-            {
-                var query = string.Join("&", queryParams.Select(qp => $"{qp.Key}={Uri.EscapeDataString(qp.Value)}"));
-                urlBuilder.Append('?').Append(query);
-            }
-
             try
             {
-                return await _httpClient.GetAsync(urlBuilder.ToString());
+                var token = await SecureStorage.GetAsync("access_token");
+
+                if (!string.IsNullOrWhiteSpace(token))
+                {
+                    _httpClient.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue("Bearer", token);
+                }
+
+                var urlAdress = BaseUrl + uriWithParans;
+                return await _httpClient.GetAsync(urlAdress);
             }
             catch (Exception ex)
             {

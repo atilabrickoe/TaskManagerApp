@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TaskManagerApp.Services
+﻿namespace TaskManagerApp.Services
 {
     public class NavigationService : INavigationService
     {
-        public Task PushAsync(Page page)
+        public Task NavigationTO(string route)
         {
-            return Shell.Current.Navigation.PushAsync(page);
+            return Shell.Current.GoToAsync(route);
         }
     }
 }

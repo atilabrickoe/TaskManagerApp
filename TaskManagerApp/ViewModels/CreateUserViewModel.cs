@@ -9,7 +9,6 @@ namespace TaskManagerApp.ViewModels
     {
         private readonly IUserService _userService;
         private readonly INavigationService _navigationService;
-        private readonly IServiceProvider _serviceProvider;
 
         [ObservableProperty]
         private string userName = string.Empty;
@@ -17,11 +16,10 @@ namespace TaskManagerApp.ViewModels
         [ObservableProperty]
         private string password = string.Empty;
 
-        public CreateUserViewModel(IUserService userService, INavigationService navigationService, IServiceProvider serviceProvider)
+        public CreateUserViewModel(IUserService userService, INavigationService navigationService)
         {
             _userService = userService;
             _navigationService = navigationService;
-            _serviceProvider = serviceProvider;
         }
 
         [RelayCommand]
@@ -58,7 +56,11 @@ namespace TaskManagerApp.ViewModels
                 var result = await _userService.LoginAsync(UserName, Password);
                 if (result.Success)
                 {
+                    await SecureStorage.SetAsync("access_token", result.Data.Accesstoken);
+
                     await Application.Current.MainPage.DisplayAlert("Sucesso", "Usuário logado!", "OK");
+
+                    await _navigationService.NavigationTO(nameof(UserTaskManagerPage));
                 }
                 else
                 {
@@ -70,15 +72,6 @@ namespace TaskManagerApp.ViewModels
                 await Application.Current.MainPage.DisplayAlert("Erro", ex.Message, "OK");
             }
 
-            //var loginPage = _serviceProvider.GetService<LoginPage>();
-            //if (loginPage != null)
-            //{
-            //    await _navigationService.PushAsync(loginPage);
-            //}
-            //else
-            //{
-            //    await Application.Current.MainPage.DisplayAlert("Erro", "Página de login não encontrada.", "OK");
-            //}
         }
     }
 }

@@ -18,6 +18,16 @@ namespace TaskManagerApp.Services
 
             if (string.IsNullOrWhiteSpace(json))
             {
+                if(response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return new Response<T>
+                    {
+                        Success = false,
+                        ErrorCode = ErrorCodes.UNAUTHORIZED,
+                        Message = "Acesso negado, favor efetuar log-out/login e tentar novamente."
+                    };
+                }
+
                 return new Response<T>
                 {
                     Success = false,
