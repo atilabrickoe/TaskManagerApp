@@ -8,7 +8,8 @@ namespace TaskManagerApp.Services
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<ApiService> _logger;
-        public static readonly string BaseUrl = "https://localhost:7015/";
+        //public static readonly string BaseUrl = "https://localhost:7015/";
+        public static readonly string BaseUrl = "https://6r2dt60c-7015.brs.devtunnels.ms/";
 
         public ApiService(HttpClient httpClient, ILogger<ApiService> logger)
         {

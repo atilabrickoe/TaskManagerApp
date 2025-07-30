@@ -35,13 +35,13 @@ namespace TaskManagerApp.ViewModels
 
             var result = await _userService.CreateUserAsync(UserName, Password);
 
-            if (result != null)
+            if (result.Success)
             {
-                await Application.Current.MainPage.DisplayAlert("Sucesso", "Usuário criado!", "OK");
+                await Application.Current.MainPage.DisplayAlert("Sucesso", "Usuário Criado!", "OK");
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Erro", "Não foi possível criar o usuário.", "OK");
+                await Application.Current.MainPage.DisplayAlert("Erro", result.Message, "OK");
             }
         }
 
@@ -53,17 +53,23 @@ namespace TaskManagerApp.ViewModels
                 await Application.Current.MainPage.DisplayAlert("Erro", "Preencha todos os campos", "OK");
                 return;
             }
-
-            var result = await _userService.LoginAsync(UserName, Password);
-
-            if (result != null)
+            try
             {
-                await Application.Current.MainPage.DisplayAlert("Sucesso", "Usuário logado!", "OK");
+                var result = await _userService.LoginAsync(UserName, Password);
+                if (result.Success)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Sucesso", "Usuário logado!", "OK");
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Erro", result.Message, "OK");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Erro", "Não foi possível logar o usuário.", "OK");
+                await Application.Current.MainPage.DisplayAlert("Erro", ex.Message, "OK");
             }
+
             //var loginPage = _serviceProvider.GetService<LoginPage>();
             //if (loginPage != null)
             //{

@@ -1,53 +1,31 @@
-﻿using System.Text;
-using System.Text.Json;
-using TaskManagerApp.Models;
+﻿using TaskManagerApp.Models;
 using TaskManagerApp.Services.Responses;
 
 namespace TaskManagerApp.Services
 {
-    public class UserService : IUserService
+    public class UserService : BaseService, IUserService
     {
-        private readonly IApiService _apiService;
-        private readonly JsonSerializerOptions _serializerOptions;
+        private readonly IHandleApiResponseService<Token> _loginHandler;
+        private readonly IHandleApiResponseService<User> _createUserHandler;
 
-        public UserService(IApiService apiService)
+        public UserService(
+            IApiService apiService,
+            IHandleApiResponseService<Token> loginHandler,
+            IHandleApiResponseService<User> createUserHandler)
+            : base(apiService)
         {
-            _apiService = apiService;
-            _serializerOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            _loginHandler = loginHandler;
+            _createUserHandler = createUserHandler;
         }
 
-        public async Task<User?> CreateUserAsync(string userName, string password)
+        public async Task<Response<Token>?> LoginAsync(string username, string password)
         {
-            var user = new User { UserName = userName, Password = password };
-            var json = JsonSerializer.Serialize(user);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _apiService.PostRequest("User/CreateUser", content);
-
-            if (!response.IsSuccessStatusCode)
-                return null;
-
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<User>(responseBody, _serializerOptions);
+            return await PostAndHandleAsync("User/Login", new { username, password }, _loginHandler);
         }
 
-        public async Task<Token?> LoginAsync(string userName, string password)
+        public async Task<Response<User>?> CreateUserAsync(string username, string password)
         {
-            var user = new User { UserName = userName, Password = password };
-            var json = JsonSerializer.Serialize(user);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _apiService.PostRequest("User/Login", content);
-
-            if (!response.IsSuccessStatusCode)
-                return null;
-
-            var responseBody = await response.Content.ReadAsStringAsync();
-            var responseToken = JsonSerializer.Deserialize<LoginResponse>(responseBody, _serializerOptions);
-            return responseToken?.Token;
+            return await PostAndHandleAsync("User/CreateUser", new { username, password }, _createUserHandler);
         }
     }
 }

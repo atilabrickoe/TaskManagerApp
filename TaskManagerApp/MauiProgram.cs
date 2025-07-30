@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Text.Json.Serialization;
 using TaskManagerApp.Pages;
 using TaskManagerApp.Services;
 using TaskManagerApp.ViewModels;
@@ -32,7 +33,8 @@ namespace TaskManagerApp
             builder.Services.AddTransient<CreateUserPage>();
             builder.Services.AddTransient<CreateUserViewModel>();
             builder.Services.AddTransient<INavigationService, NavigationService>();
-            
+            builder.Services.AddTransient(typeof(IHandleApiResponseService<>), typeof(HandleApiResponseService<>));
+
 
 
             return builder.Build();

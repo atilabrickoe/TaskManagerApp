@@ -1,10 +1,11 @@
 ﻿using TaskManagerApp.Models;
+using TaskManagerApp.Services.Responses;
 
 namespace TaskManagerApp.Services
 {
     public interface IUserService
     {
-        Task<User?> CreateUserAsync(string userName, string password);
-        Task<Token?> LoginAsync(string userName, string password);
+        Task<Response<Token>?> LoginAsync(string username, string password);
+        Task<Response<User>?> CreateUserAsync(string username, string password);
     }
 }
