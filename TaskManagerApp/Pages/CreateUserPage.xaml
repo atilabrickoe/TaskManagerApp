@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:TaskManagerApp.ViewModels"
+             x:Class="TaskManagerApp.Pages.CreateUserPage"
+             Title="Criar Usuário">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*"
+          RowSpacing="20"
+          Margin="20,150,20,40">
+
+        <Image Grid.Row="0"
+               Source="lanchesico.png"
+               Aspect="AspectFit"
+               HeightRequest="100"
+               WidthRequest="100" />
+
+        <Label Grid.Row="1"
+               Text="Olá! Bem vindo ao Gerenciador de Tarefas!"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" />
+
+        <Frame Grid.Row="2"
+               Padding="15">
+            <VerticalStackLayout>
+                <Entry Placeholder="Nome"
+                       Text="{Binding UserName}"
+                       TextColor="CadetBlue"/>
+
+                <Entry Placeholder="Password"
+                       IsPassword="True"
+                       Text="{Binding Password}" 
+                       TextColor="CadetBlue"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <Button Grid.Row="3"
+                Text="Criar usuário"
+                FontSize="Medium"
+                TextColor="Red"
+                BackgroundColor="Transparent"
+                Command="{Binding CreateUserCommand}" />
+
+        <Button Grid.Row="4"
+                Text="Efetuar Login"
+                FontSize="Small"
+                FontAttributes="Bold"
+                TextColor="Red"
+                BackgroundColor="Transparent"
+                Command="{Binding LoginCommand}" />
+    </Grid>
+</ContentPage>
