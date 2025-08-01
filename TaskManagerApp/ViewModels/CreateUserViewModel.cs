@@ -57,6 +57,7 @@ namespace TaskManagerApp.ViewModels
                 if (result.Success)
                 {
                     await SecureStorage.SetAsync("access_token", result.Data.Accesstoken);
+                    await SecureStorage.SetAsync("CurrentUserId", result.Data.UserId.ToString());
 
                     await Application.Current.MainPage.DisplayAlert("Sucesso", "Usuário logado!", "OK");
 

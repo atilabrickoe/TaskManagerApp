@@ -43,7 +43,7 @@ namespace TaskManagerApp.Services
                     PropertyNameCaseInsensitive = true
                 };
                 // Needed because your API sends enum names as strings
-                options.Converters.Add(new JsonStringEnumConverter());
+                //options.Converters.Add(new JsonStringEnumConverter());
 
                 var apiResponse = JsonSerializer.Deserialize<Response<T>>(json, options);
 

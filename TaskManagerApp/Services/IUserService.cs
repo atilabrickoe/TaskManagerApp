@@ -9,5 +9,6 @@ namespace TaskManagerApp.Services
         Task<Response<User>?> CreateUserAsync(string username, string password);
         Task<Response<List<User>>> GetAllUsers(bool withTask);
         Task<Response<List<User>>> CreateRandomAsync(int amount);
+        Task<Response<User>> GetUserByIdAsync(Guid id, bool withTask = false);
     }
 }

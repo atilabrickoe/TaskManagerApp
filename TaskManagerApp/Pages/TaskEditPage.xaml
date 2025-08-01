@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TaskManagerApp.Pages.TaskEditPage"
+             Title="{Binding PageTitle}">
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="15">
+
+            <Label Text="Title" />
+            <Entry Text="{Binding TaskItem.Title}" Placeholder="Enter task title"/>
+
+            <Label Text="Description" />
+            <Editor Text="{Binding TaskItem.Description}" AutoSize="TextChanges" />
+
+            <Label Text="Status" />
+            <Picker Title="Select Status"
+                    ItemsSource="{Binding TaskStatusValues}"
+                    SelectedItem="{Binding TaskItem.Status, Mode=TwoWay}" />
+
+            <Label Text="Due Date" />
+            <DatePicker Date="{Binding TaskItem.DueDate}" />
+
+            <Label Text="Assign to User" />
+            <Picker ItemsSource="{Binding Users}"
+                    ItemDisplayBinding="{Binding UserName}"
+                    SelectedItem="{Binding SelectedUser}"
+                    IsEnabled="{Binding IsUserPickerEnabled}"/>
+
+            <Button Text="{Binding SaveButtonText}"
+                    Command="{Binding SaveCommand}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="End"
+                    WidthRequest="200"
+                    Margin="10"/>
+            <Button Text="Cancelar"
+                    BackgroundColor="Gray"
+                    TextColor="White" 
+                    WidthRequest="200"
+                    Command="{Binding CancelCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

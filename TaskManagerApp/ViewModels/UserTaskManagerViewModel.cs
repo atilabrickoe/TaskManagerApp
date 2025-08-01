@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using TaskManagerApp.Models;
 using TaskManagerApp.Pages;
 using TaskManagerApp.Services;
@@ -19,7 +20,7 @@ namespace TaskManagerApp.ViewModels
         private readonly IUserService _userService;
         private readonly ITaskItemService _taskItemService;
 
-        public UserTaskManagerViewModel(IServiceProvider serviceProvider,IUserService userService, ITaskItemService taskItemService)
+        public UserTaskManagerViewModel(IServiceProvider serviceProvider, IUserService userService, ITaskItemService taskItemService)
         {
             _userService = userService;
             _taskItemService = taskItemService;
@@ -55,7 +56,7 @@ namespace TaskManagerApp.ViewModels
                 return;
 
             var randonUserResponse = await _userService.CreateRandomAsync(amount.Value);
-            if(randonUserResponse.Success)
+            if (randonUserResponse.Success)
             {
                 foreach (var user in randonUserResponse.Data)
                 {
@@ -67,6 +68,32 @@ namespace TaskManagerApp.ViewModels
             {
                 await Application.Current.MainPage.DisplayAlert("Erro", randonUserResponse.Message, "OK");
             }
+        }
+        [RelayCommand]
+        private async Task AddTask()
+        {
+            var currentUserId = await SecureStorage.GetAsync("CurrentUserId");
+
+            await Shell.Current.GoToAsync(nameof(TaskEditPage), true,
+                                          new Dictionary<string, object>
+                                          {
+                                            { "CurrentUserId", currentUserId},
+                                            { "TaskId", string.Empty }
+                                          });
+
+        }
+
+        [RelayCommand]
+        private async Task EditTask(TaskItem taskItem)
+        {
+            var currentUserId = await SecureStorage.GetAsync("CurrentUserId");
+
+            await Shell.Current.GoToAsync(nameof(TaskEditPage), true,
+                                          new Dictionary<string, object>
+                                          {
+                                            { "CurrentUserId", currentUserId},
+                                            { "TaskId", taskItem.Id.ToString() }
+                                          });
         }
         [RelayCommand]
         private async Task DeleteTask(TaskItem taskItem)
@@ -81,7 +108,7 @@ namespace TaskManagerApp.ViewModels
                 if (!confirm)
                     return;
 
-                var result = await _taskItemService.DeleteTaskAsync(taskItem.Id);
+                var result = await _taskItemService.DeleteTaskByIdAsync(taskItem.Id);
                 if (result.Success)
                 {
                     Users.FirstOrDefault(u => u.Id == SelectedUser.Id)?.Tasks.Remove(taskItem);

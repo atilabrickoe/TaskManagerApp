@@ -6,7 +6,7 @@ namespace TaskManagerApp.Services
     public class UserService : BaseService, IUserService
     {
         private readonly IHandleApiResponseService<Token> _loginHandler;
-        private readonly IHandleApiResponseService<User> _createUserHandler;
+        private readonly IHandleApiResponseService<User> _userHandler;
         private readonly IHandleApiResponseService<List<User>> _createUserListHandler;
 
         public UserService(
@@ -17,7 +17,7 @@ namespace TaskManagerApp.Services
             : base(apiService)
         {
             _loginHandler = loginHandler;
-            _createUserHandler = createUserHandler;
+            _userHandler = createUserHandler;
             _createUserListHandler = createUserListHandler;
         }
 
@@ -30,9 +30,13 @@ namespace TaskManagerApp.Services
         {
             return await PostAndHandleAsync("User/CreateRandom", new { amount }, _createUserListHandler);
         }
+        public async Task<Response<User>> GetUserByIdAsync(Guid Id, bool withTask = false)
+        {
+            return await GetAndHandleAsync("User/GetUserById", _userHandler, [Id.ToString(), withTask.ToString()]);
+        }
         public async Task<Response<User>?> CreateUserAsync(string username, string password)
         {
-            return await PostAndHandleAsync("User/CreateUser", new { username, password }, _createUserHandler);
+            return await PostAndHandleAsync("User/CreateUser", new { username, password }, _userHandler);
         }
         public async Task<Response<List<User>>> GetAllUsers(bool withTask)
         {

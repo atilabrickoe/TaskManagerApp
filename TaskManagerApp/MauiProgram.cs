@@ -37,6 +37,9 @@ namespace TaskManagerApp
             builder.Services.AddTransient<UserTaskManagerViewModel>();
             builder.Services.AddTransient<AddRandomUsersPage>();
             builder.Services.AddTransient<AddRandomUsersViewModel>();
+            builder.Services.AddTransient<TaskEditPage>();
+            builder.Services.AddTransient<TaskEditViewModel>();
+
 
 
 

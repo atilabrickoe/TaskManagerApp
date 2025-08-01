@@ -90,16 +90,46 @@
                                BorderColor="DarkGray"
                                CornerRadius="8">
                             <VerticalStackLayout>
-                                <Label Text="{Binding DueDate, StringFormat='{0:dd/MM/yyyy}'}"
-                                       FontSize="14"
-                                       FontAttributes="Bold" />
-                                <Label Text="{Binding Title}" FontSize="16"/>
+                                <Grid ColumnDefinitions="200,*,*,*" RowDefinitions="*,*,*">
+                                    <Label Text="Data de Execução" Grid.Column="0" Grid.Row="0"/>
+                                    <Label Text="Titulo" Grid.Column="1" Grid.Row="0"/>
+                                    <Label Text="Descrição" Grid.Column="2" Grid.Row="0"/>
+                                    <Label Text="Status" Grid.Column="3" Grid.Row="0"/>
+                                    <Label Grid.Column="0" Grid.Row="1"
+                                           Text="{Binding DueDate, StringFormat='{0:dd/MM/yyyy}'}"
+                                           FontSize="14"
+                                           FontAttributes="Bold" />
+                                    <Label Grid.Column="1" Grid.Row="1"
+                                           Text="{Binding Title}" 
+                                           FontSize="16"/>
+                                    <Label Grid.Column="2" Grid.Row="1"
+                                           Text="{Binding Description}"
+                                           FontSize="16"/>
+                                    <Label Grid.Column="3" Grid.Row="1"
+                                           Text="{Binding Status}"
+                                           FontSize="16"/>
+                                    <HorizontalStackLayout Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="2" Spacing="8" HorizontalOptions="Start">
+                                        <Button Text="Editar"
+                                                BackgroundColor="DarkGreen"
+                                                TextColor="White"
+                                                HeightRequest="28"
+                                                WidthRequest="70"
+                                                FontSize="12"
+                                                Padding="2"
+                                                Command="{Binding Source={x:Reference UserTaskPage}, Path=BindingContext.EditTaskCommand}"
+                                                CommandParameter="{Binding .}" />
+                                        <Button Text="Delete"
+                                                BackgroundColor="DarkRed"
+                                                TextColor="White"
+                                                HeightRequest="28"
+                                                WidthRequest="70"
+                                                FontSize="12"
+                                                Padding="2"
+                                                Command="{Binding Source={x:Reference UserTaskPage}, Path=BindingContext.DeleteTaskCommand}"
+                                                CommandParameter="{Binding .}" />
+                                    </HorizontalStackLayout>
 
-                                <Button Text="Delete"
-                                        BackgroundColor="Red"
-                                        TextColor="White"
-                                        Command="{Binding Source={x:Reference UserTaskPage}, Path=BindingContext.DeleteTaskCommand}"
-                                        CommandParameter="{Binding .}" />
+                                </Grid>
                             </VerticalStackLayout>
                         </Frame>
                     </DataTemplate>
