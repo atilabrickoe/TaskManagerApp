@@ -8,7 +8,8 @@ namespace TaskManagerApp.Services
 {
     public interface IApiService
     {
-        Task<HttpResponseMessage> PostRequest(string uri, HttpContent content);
-        Task<HttpResponseMessage> GetRequest(string uriWithParans);
+        Task<HttpResponseMessage> PostAsync(string uri, HttpContent content);
+        Task<HttpResponseMessage> GetAsync(string uriWithParans);
+        Task<HttpResponseMessage> DeleteAsync(string endpoint);
     }
 }

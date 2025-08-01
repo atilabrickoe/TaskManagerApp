@@ -28,14 +28,15 @@ namespace TaskManagerApp
             // Register services
             builder.Services.AddHttpClient<IApiService, ApiService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ITaskItemService, TaskItemService>();
+            builder.Services.AddTransient<INavigationService, NavigationService>();
+            builder.Services.AddTransient(typeof(IHandleApiResponseService<>), typeof(HandleApiResponseService<>));
 
             // Register view + viewmodel
             //builder.Services.AddTransient<CreateUserPage>();
             //builder.Services.AddTransient<UserTaskManagerPage>();
             builder.Services.AddTransient<CreateUserViewModel>();
             builder.Services.AddTransient<UserTaskManagerViewModel>();
-            builder.Services.AddTransient<INavigationService, NavigationService>();
-            builder.Services.AddTransient(typeof(IHandleApiResponseService<>), typeof(HandleApiResponseService<>));
 
 
 

@@ -10,8 +10,7 @@ namespace TaskManagerApp.Services
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<ApiService> _logger;
-        //public static readonly string BaseUrl = "https://localhost:7015/";
-        public static readonly string BaseUrl = "https://6r2dt60c-7015.brs.devtunnels.ms/";
+        public static readonly string BaseUrl = "http://localhost:7015/";
 
         public ApiService(HttpClient httpClient, ILogger<ApiService> logger)
         {
@@ -19,18 +18,12 @@ namespace TaskManagerApp.Services
             _logger = logger;
         }
 
-        public async Task<HttpResponseMessage> PostRequest(string uri, HttpContent content)
+        public async Task<HttpResponseMessage> PostAsync(string uri, HttpContent content)
         {
             var urlAdress = BaseUrl + uri;
             try
             {
-                var token = await SecureStorage.GetAsync("access_token");
-
-                if (!string.IsNullOrWhiteSpace(token))
-                {
-                    _httpClient.DefaultRequestHeaders.Authorization =
-                        new AuthenticationHeaderValue("Bearer", token);
-                }
+                await SetTokenBearer();
 
                 return await _httpClient.PostAsync(urlAdress, content);
             }
@@ -41,17 +34,12 @@ namespace TaskManagerApp.Services
             }
         }
 
-        public async Task<HttpResponseMessage> GetRequest(string uriWithParans)
+
+        public async Task<HttpResponseMessage> GetAsync(string uriWithParans)
         {
             try
             {
-                var token = await SecureStorage.GetAsync("access_token");
-
-                if (!string.IsNullOrWhiteSpace(token))
-                {
-                    _httpClient.DefaultRequestHeaders.Authorization =
-                        new AuthenticationHeaderValue("Bearer", token);
-                }
+                await SetTokenBearer();
 
                 var urlAdress = BaseUrl + uriWithParans;
                 return await _httpClient.GetAsync(urlAdress);
@@ -60,6 +48,31 @@ namespace TaskManagerApp.Services
             {
                 _logger.LogError($"Error sending GET request: {ex.Message}");
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+        }
+        public async Task<HttpResponseMessage> DeleteAsync(string uriWithParans)
+        {
+            try
+            {
+                await SetTokenBearer();
+
+                var urlAdress = BaseUrl + uriWithParans;
+                return await _httpClient.DeleteAsync(urlAdress);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error sending Delete request: {ex.Message}");
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+        }
+        private async Task SetTokenBearer()
+        {
+            var token = await SecureStorage.GetAsync("access_token");
+
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
             }
         }
     }
