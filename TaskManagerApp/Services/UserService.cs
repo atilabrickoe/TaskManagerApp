@@ -26,6 +26,10 @@ namespace TaskManagerApp.Services
             return await PostAndHandleAsync("User/Login", new { username, password }, _loginHandler);
         }
 
+        public async Task<Response<List<User>>> CreateRandomAsync(int amount)
+        {
+            return await PostAndHandleAsync("User/CreateRandom", new { amount }, _createUserListHandler);
+        }
         public async Task<Response<User>?> CreateUserAsync(string username, string password)
         {
             return await PostAndHandleAsync("User/CreateUser", new { username, password }, _createUserHandler);

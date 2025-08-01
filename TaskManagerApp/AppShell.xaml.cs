@@ -9,6 +9,7 @@ namespace TaskManagerApp
             InitializeComponent();
             Routing.RegisterRoute(nameof(CreateUserPage), typeof(CreateUserPage));
             Routing.RegisterRoute(nameof(UserTaskManagerPage), typeof(UserTaskManagerPage));
+            Routing.RegisterRoute(nameof(AddRandomUsersPage), typeof(AddRandomUsersPage));
         }
     }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TaskManagerApp.Pages.AddRandomUsersPage"
+             Title="AddRandomUsersPage">
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Label Text="Quantos usuários você deseja criar?"
+               FontSize="18"
+               HorizontalOptions="Center" />
+
+        <Entry x:Name="CountEntry"
+               Placeholder="Digite um número"
+               Keyboard="Numeric"
+               Text="{Binding Count}"/>
+
+        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+            <Button Text="Confirmar"
+                    BackgroundColor="Green"
+                    TextColor="White" 
+                    Command="{Binding ConfirmCommand}" />
+            <Button Text="Cancelar"
+                    BackgroundColor="Gray"
+                    TextColor="White" 
+                    Command="{Binding CancelCommand}" />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using TaskManagerApp.Models;
+using TaskManagerApp.Pages;
 using TaskManagerApp.Services;
 
 namespace TaskManagerApp.ViewModels
@@ -14,13 +15,15 @@ namespace TaskManagerApp.ViewModels
         [ObservableProperty]
         private User? selectedUser;
 
+        private readonly IServiceProvider _serviceProvider;
         private readonly IUserService _userService;
         private readonly ITaskItemService _taskItemService;
 
-        public UserTaskManagerViewModel(IUserService userService, ITaskItemService taskItemService)
+        public UserTaskManagerViewModel(IServiceProvider serviceProvider,IUserService userService, ITaskItemService taskItemService)
         {
             _userService = userService;
             _taskItemService = taskItemService;
+            _serviceProvider = serviceProvider;
             LoadData();
         }
 
@@ -38,6 +41,32 @@ namespace TaskManagerApp.ViewModels
                 await Application.Current.MainPage.DisplayAlert("Erro", userTaskResponse.Message, "OK");
             }
 
+        }
+        [RelayCommand]
+        private async Task AddUser()
+        {
+            var createRandomUsersPage = _serviceProvider.GetRequiredService<AddRandomUsersPage>();
+            var createRandomUsersVM = (AddRandomUsersViewModel)createRandomUsersPage.BindingContext;
+
+            await Application.Current.MainPage.Navigation.PushModalAsync(createRandomUsersPage);
+
+            var amount = await createRandomUsersVM.ResultCompletionSource.Task;
+            if (amount == null)
+                return;
+
+            var randonUserResponse = await _userService.CreateRandomAsync(amount.Value);
+            if(randonUserResponse.Success)
+            {
+                foreach (var user in randonUserResponse.Data)
+                {
+                    Users.Add(user);
+                }
+                await Application.Current.MainPage.DisplayAlert("Sucesso", $"{amount} usuários criados com sucesso.", "OK");
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Erro", randonUserResponse.Message, "OK");
+            }
         }
         [RelayCommand]
         private async Task DeleteTask(TaskItem taskItem)

@@ -3,57 +3,109 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TaskManagerApp.Pages.UserTaskManagerPage"
              xmlns:viewmodels="clr-namespace:TaskManagerApp.ViewModels"
-             Title="User TaskManager"
              x:Name="UserTaskPage">
+    <!-- Three-column layout -->
+    <Grid ColumnDefinitions="250,200,*" RowDefinitions="*">
 
-    <Grid ColumnDefinitions="200,*" RowDefinitions="*">
+        <!-- Column 0: Menu -->
+        <VerticalStackLayout Grid.Column="0"
+                             Padding="10"
+                             Spacing="10">
+            <Label Text="Gerenciador de Tarefas"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
 
-        
-        <CollectionView Grid.Column="0"
-                        ItemsSource="{Binding Users}"
-                        SelectionMode="Single"
-                        SelectedItem="{Binding SelectedUser}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Padding="10" Margin="5" BackgroundColor="LightGray" CornerRadius="10">
-                        <Label Text="{Binding UserName}" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center"/>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+            <Button Text="Add N' usuários"
+                    Command="{Binding AddUserCommand}"
+                    WidthRequest="200"
+                    HorizontalOptions="Center"/>
 
-        <ScrollView Grid.Column="1" Padding="10">
-            <VerticalStackLayout>
-                <Label Text="Tasks Calendar"
-                       FontSize="20"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"
-                       Margin="0,0,0,10"/>
+            <Button Text="Add Tarefas"
+                    Command="{Binding AddTaskCommand}"
+                    WidthRequest="200"
+                    HorizontalOptions="Center"/>
 
-                <CollectionView ItemsSource="{Binding SelectedUser.Tasks}">
-                    <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Vertical" Span="1"/>
-                    </CollectionView.ItemsLayout>
+            <Button Text="Log Out"
+                    Command="{Binding LogOutCommand}"
+                    WidthRequest="200"
+                    HorizontalOptions="Center"/>
+        </VerticalStackLayout>
 
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame Margin="5" Padding="10" BorderColor="DarkGray" CornerRadius="8">
-                                <VerticalStackLayout>
-                                    <Label Text="{Binding DueDate, StringFormat='{0:dd/MM/yyyy}'}" 
-                                           FontSize="14" FontAttributes="Bold" />
-                                    <Label Text="{Binding Title}" FontSize="16"/>
+        <!-- Column 1: Users list -->
+        <Grid Grid.Column="1"
+              MinimumWidthRequest="150"
+              RowDefinitions="Auto,*"
+              Padding="5">
+            <Label Text="Usuários"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10"/>
 
-                                    <Button Text="Delete"
-                                            BackgroundColor="Red"
-                                            TextColor="White"
-                                            Command="{Binding Source={x:Reference UserTaskPage}, Path=BindingContext.DeleteTaskCommand}"
-                                            CommandParameter="{Binding .}" />   
-                                </VerticalStackLayout>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </VerticalStackLayout>
-        </ScrollView>
+            <CollectionView Grid.Row="1"
+                            ItemsSource="{Binding Users}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedUser}"
+                            VerticalScrollBarVisibility="Never">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="1"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame CornerRadius="10"
+                               Padding="5"
+                               Margin="5"
+                               BorderColor="LightGray">
+                            <Label Text="{Binding UserName}"
+                                   FontSize="16"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <!-- Column 2: Tasks list -->
+        <Grid Grid.Column="2"
+              MinimumWidthRequest="100"
+              RowDefinitions="Auto,*"
+              Padding="5">
+            <Label Text="Tarefas"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10"/>
+
+            <CollectionView Grid.Row="1"
+                            ItemsSource="{Binding SelectedUser.Tasks}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="1"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="5"
+                               Padding="10"
+                               BorderColor="DarkGray"
+                               CornerRadius="8">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding DueDate, StringFormat='{0:dd/MM/yyyy}'}"
+                                       FontSize="14"
+                                       FontAttributes="Bold" />
+                                <Label Text="{Binding Title}" FontSize="16"/>
+
+                                <Button Text="Delete"
+                                        BackgroundColor="Red"
+                                        TextColor="White"
+                                        Command="{Binding Source={x:Reference UserTaskPage}, Path=BindingContext.DeleteTaskCommand}"
+                                        CommandParameter="{Binding .}" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
     </Grid>
 </ContentPage>
