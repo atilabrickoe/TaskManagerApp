@@ -19,13 +19,15 @@ namespace TaskManagerApp.ViewModels
         private readonly IServiceProvider _serviceProvider;
         private readonly IUserService _userService;
         private readonly ITaskItemService _taskItemService;
+        private readonly INavigationService _navigationService;
 
-        public UserTaskManagerViewModel(IServiceProvider serviceProvider, IUserService userService, ITaskItemService taskItemService)
+        public UserTaskManagerViewModel(IServiceProvider serviceProvider, IUserService userService, ITaskItemService taskItemService, INavigationService navigationService)
         {
             _userService = userService;
             _taskItemService = taskItemService;
             _serviceProvider = serviceProvider;
             LoadData();
+            _navigationService = navigationService;
         }
 
         private async void LoadData()
@@ -68,6 +70,13 @@ namespace TaskManagerApp.ViewModels
             {
                 await Application.Current.MainPage.DisplayAlert("Erro", randonUserResponse.Message, "OK");
             }
+        }
+        [RelayCommand]
+        private async Task LogOut()
+        {
+            SecureStorage.RemoveAll();
+            await _navigationService.NavigationTO(nameof(CreateUserPage));
+            await Application.Current.MainPage.DisplayAlert("Sucesso", "Log Out realizado com sucesso.", "OK");
         }
         [RelayCommand]
         private async Task AddTask()

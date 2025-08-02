@@ -57,11 +57,6 @@ namespace TaskManagerApp.Services
                     };
                 }
 
-                if (!apiResponse.Success)
-                {
-                    apiResponse.Message = GetMessageFromErrorCode(apiResponse.ErrorCode);
-                }
-
                 return apiResponse;
             }
             catch (JsonException)
@@ -73,20 +68,6 @@ namespace TaskManagerApp.Services
                     Message = "Erro inesperado ao interpretar resposta do servidor."
                 };
             }
-        }
-
-        private string GetMessageFromErrorCode(ErrorCodes errorCode)
-        {
-            return errorCode switch
-            {
-                ErrorCodes.USER_NOT_FOUND => "Usuário não encontrado.",
-                ErrorCodes.USER_ALREADY_EXISTS => "Este nome de usuário já existe.",
-                ErrorCodes.LOGIN_WITH_WRONG_PASSWORD => "Senha incorreta.",
-                ErrorCodes.MISSING_INFORMATION => "Informações obrigatórias ausentes.",
-                ErrorCodes.TASK_NOT_FOUND => "Tarefa não encontrada.",
-                ErrorCodes.TASK_TITLE_ALREADY_EXISTS => "Já existe uma tarefa com esse título.",
-                _ => "Ocorreu um erro inesperado. Tente novamente."
-            };
         }
     }
 }

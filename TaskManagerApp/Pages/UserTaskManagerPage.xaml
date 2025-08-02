@@ -44,19 +44,38 @@
                    Margin="0,0,0,10"/>
 
             <CollectionView Grid.Row="1"
-                            ItemsSource="{Binding Users}"
-                            SelectionMode="Single"
-                            SelectedItem="{Binding SelectedUser}"
-                            VerticalScrollBarVisibility="Never">
+                ItemsSource="{Binding Users}"
+                SelectionMode="Single"
+                SelectedItem="{Binding SelectedUser}"
+                VerticalScrollBarVisibility="Never">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="1"/>
                 </CollectionView.ItemsLayout>
+
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame CornerRadius="10"
                                Padding="5"
-                               Margin="5"
-                               BorderColor="LightGray">
+                               Margin="5">
+
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                     <!--Normal (not selected)--> 
+                                    <VisualState Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BorderColor" Value="Transparent"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    
+                                    <!--Selected-->
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BorderColor" Value="PowderBlue"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
                             <Label Text="{Binding UserName}"
                                    FontSize="16"
                                    HorizontalOptions="Center"
@@ -65,6 +84,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
         </Grid>
 
         <!-- Column 2: Tasks list -->
