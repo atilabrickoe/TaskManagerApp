@@ -15,6 +15,7 @@ namespace TaskManagerApp.ViewModels
         private readonly ITaskItemService _taskItemService;
         private readonly IUserService _userService;
         private readonly INavigationService _navigationService;
+        private readonly IServiceProvider _serviceProvider;
 
 
         [ObservableProperty]
@@ -45,11 +46,13 @@ namespace TaskManagerApp.ViewModels
         public TaskEditViewModel(
             ITaskItemService taskItemService,
             IUserService userService,
-            INavigationService navigationService)
+            INavigationService navigationService,
+            IServiceProvider serviceProvider)
         {
             _taskItemService = taskItemService;
             _userService = userService;
             _navigationService = navigationService;
+            _serviceProvider = serviceProvider;
         }
 
         public async void Initialize(Guid currentUserId, Guid taskId)
@@ -116,6 +119,8 @@ namespace TaskManagerApp.ViewModels
             if (response.Success)
             {
                 await Application.Current.MainPage.DisplayAlert("Success", "Tarefa salva!", "OK");
+                var vm = _serviceProvider.GetService<UserTaskManagerViewModel>();
+                vm.LoadDataAsync();
                 await _navigationService.NavigationTO(nameof(UserTaskManagerPage));
             }
             else

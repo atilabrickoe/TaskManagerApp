@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -10,13 +11,13 @@ namespace TaskManagerApp.Services
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<ApiService> _logger;
-        //public static readonly string BaseUrl = "https://localhost:7015/";
-        public static readonly string BaseUrl = "http://localhost:7015/";
+        public readonly string BaseUrl;
 
-        public ApiService(HttpClient httpClient, ILogger<ApiService> logger)
+        public ApiService(IConfiguration config, HttpClient httpClient, ILogger<ApiService> logger)
         {
             _httpClient = httpClient;
             _logger = logger;
+            BaseUrl = config["ApiSettings:BaseUrl"] ?? "http://localhost:7015/";
         }
 
         public async Task<HttpResponseMessage> PostAsync(string uri, HttpContent content)

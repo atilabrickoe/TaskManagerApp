@@ -56,7 +56,8 @@
                     <DataTemplate>
                         <Frame CornerRadius="10"
                                Padding="5"
-                               Margin="5">
+                               Margin="5"
+                               BackgroundColor="Black">
 
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup Name="CommonStates">
@@ -91,30 +92,6 @@
                                         </DataTrigger>
                                     </Label.Triggers>
                                 </Label>
-
-                                <!--<Label Text="{Binding UserName}"
-                                       FontSize="16"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center" />
-
-                                --><!--Show the notification message only if Notification == true--><!--
-                                <Frame IsVisible="{Binding Notification}"
-                                       WidthRequest="20"
-                                       HeightRequest="20"
-                                       CornerRadius="10"
-                                       BackgroundColor="Green"
-                                       HorizontalOptions="Start"
-                                       VerticalOptions="Start"
-                                       ToolTipProperties.Text="{Binding MenssageNotification}">
-                                    <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                                    Command="{Binding BindingContext.ShowNotificationCommand,
-                                                                      Source={RelativeSource AncestorType={x:Type ContentPage}}}"
-                                                    CommandParameter="{Binding .}" />
-
-                                    </Frame.GestureRecognizers>
-                                </Frame>-->
-
                             </VerticalStackLayout>
                         </Frame>
                     </DataTemplate>

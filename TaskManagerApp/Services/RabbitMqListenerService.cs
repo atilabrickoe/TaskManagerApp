@@ -21,7 +21,7 @@ namespace TaskManagerApp.Services
             _logger = logger;
             _queueName = config["RabbitMQ:QueueName"] ?? "TaskManagerQueue";
             _hostName = config["RabbitMQ:HostName"] ?? "localhost";
-            _factory = new ConnectionFactory { HostName = "localhost" };
+            _factory = new ConnectionFactory { HostName = _hostName };
         }
 
         public async Task StartAsync()
@@ -29,7 +29,7 @@ namespace TaskManagerApp.Services
             var connection = await _factory.CreateConnectionAsync();
             var channel = await connection.CreateChannelAsync();
 
-            await channel.QueueDeclareAsync(queue: "TaskManagerQueue", durable: false, exclusive: false, autoDelete: false, arguments: null);
+            await channel.QueueDeclareAsync(queue: _queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
             var consumer = new AsyncEventingBasicConsumer(channel);
             consumer.ReceivedAsync += async (model, ea) =>
             {
@@ -50,7 +50,7 @@ namespace TaskManagerApp.Services
                 }
             };
 
-            await channel.BasicConsumeAsync("TaskManagerQueue", autoAck: true, consumer: consumer);
+            await channel.BasicConsumeAsync(_queueName, autoAck: true, consumer: consumer);
         }
 
         public ValueTask DisposeAsync()

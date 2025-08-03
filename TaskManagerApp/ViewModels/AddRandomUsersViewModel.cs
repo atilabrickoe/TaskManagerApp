@@ -1,10 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaskManagerApp.Pages;
 using TaskManagerApp.Services;
 
@@ -13,10 +8,12 @@ namespace TaskManagerApp.ViewModels
     public partial class AddRandomUsersViewModel : ObservableObject
     {
         private readonly INavigationService _navigationService;
+        private readonly IServiceProvider _serviceProvider;
 
-        public AddRandomUsersViewModel(INavigationService navigationService)
+        public AddRandomUsersViewModel(INavigationService navigationService, IServiceProvider serviceProvider)
         {
             _navigationService = navigationService;
+            _serviceProvider = serviceProvider;
         }
 
         [ObservableProperty]
@@ -30,6 +27,8 @@ namespace TaskManagerApp.ViewModels
             if (int.TryParse(Count, out int value) && value > 0)
             {
                 ResultCompletionSource.SetResult(value);
+                var vm = _serviceProvider.GetService<UserTaskManagerViewModel>();
+                vm.LoadDataAsync();
                 await _navigationService.NavigationTO(nameof(UserTaskManagerPage));
             }
             else

@@ -30,12 +30,14 @@ namespace TaskManagerApp.ViewModels
         private readonly IServiceProvider _serviceProvider;
         private readonly IUserService _userService;
         private readonly ITaskItemService _taskItemService;
+        private readonly INavigationService _navigationService;
 
-        public UserTaskManagerViewModel(IServiceProvider serviceProvider, IUserService userService, ITaskItemService taskItemService)
+        public UserTaskManagerViewModel(IServiceProvider serviceProvider, IUserService userService, ITaskItemService taskItemService, INavigationService navigationService)
         {
             _userService = userService;
             _taskItemService = taskItemService;
             _serviceProvider = serviceProvider;
+            _navigationService = navigationService;
         }
 
         public async void LoadDataAsync()
@@ -44,7 +46,7 @@ namespace TaskManagerApp.ViewModels
 
             if (userTaskResponse.Success)
             {
-                Users = new ObservableCollection<User>(userTaskResponse.Data);
+                FillUsers(userTaskResponse);
             }
             else
             {
@@ -52,6 +54,26 @@ namespace TaskManagerApp.ViewModels
             }
 
         }
+
+        private void FillUsers(Services.Responses.Response<List<User>> userTaskResponse)
+        {
+            foreach (var user in userTaskResponse.Data)
+            {
+                var existingUser = Users.FirstOrDefault(u => u.Id == user.Id);
+
+                if (existingUser == null)
+                {
+                    Users.Add(user);
+                }
+                else
+                {
+                    existingUser.Tasks.Clear();
+                    foreach (var task in user.Tasks)
+                        existingUser.Tasks.Add(task);
+                }
+            }
+        }
+
         [RelayCommand]
         private async Task AddUser()
         {
@@ -67,10 +89,7 @@ namespace TaskManagerApp.ViewModels
             var randonUserResponse = await _userService.CreateRandomAsync(amount.Value);
             if (randonUserResponse.Success)
             {
-                foreach (var user in randonUserResponse.Data)
-                {
-                    Users.Add(user);
-                }
+                FillUsers(randonUserResponse);
                 await Application.Current.MainPage.DisplayAlert("Sucesso", $"{amount} usuários criados com sucesso.", "OK");
             }
             else
@@ -82,8 +101,13 @@ namespace TaskManagerApp.ViewModels
         private async Task LogOut()
         {
             SecureStorage.RemoveAll();
-            await Shell.Current.GoToAsync($"///{nameof(CreateUserPage)}");
-            await Application.Current.MainPage.DisplayAlert("Sucesso", "Log Out realizado com sucesso.", "OK");
+            Users = new ObservableCollection<User>();
+            await _navigationService.NavigationTO(nameof(CreateUserPage), resetStack: true);
+
+            await Application.Current.MainPage.DisplayAlert(
+                "Sucesso",
+                "Log Out realizado com sucesso.",
+                "OK");
         }
         [RelayCommand]
         private async Task AddTask()

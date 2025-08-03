@@ -2,6 +2,6 @@
 {
     public interface INavigationService
     {
-        Task NavigationTO(string route);
+        Task NavigationTO(string route, bool resetStack = false);
     }
 }

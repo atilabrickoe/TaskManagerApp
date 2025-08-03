@@ -2,10 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:TaskManagerApp.ViewModels"
-             x:Class="TaskManagerApp.Pages.CreateUserPage"
-             Title="Criar Usuário">
-
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*"
+             x:Class="TaskManagerApp.Pages.CreateUserPage">
+    <Grid RowDefinitions="Auto,Auto,Auto,50,50"
           RowSpacing="20"
           Margin="20,150,20,40">
 
@@ -17,6 +15,7 @@
 
         <Label Grid.Row="1"
                Text="Olá! Bem vindo ao Gerenciador de Tarefas!"
+               FontSize="Subtitle"
                FontAttributes="Bold"
                HorizontalOptions="Center" />
 
@@ -38,15 +37,16 @@
                 Text="Criar usuário"
                 FontSize="Medium"
                 TextColor="Red"
-                BackgroundColor="Transparent"
+                BackgroundColor="Black"
+                WidthRequest="300"
                 Command="{Binding CreateUserCommand}" />
 
         <Button Grid.Row="4"
                 Text="Efetuar Login"
-                FontSize="Small"
-                FontAttributes="Bold"
+                FontSize="Medium"
                 TextColor="Red"
-                BackgroundColor="Transparent"
+                BackgroundColor="Black"
+                WidthRequest="300"
                 Command="{Binding LoginCommand}" />
     </Grid>
 </ContentPage>

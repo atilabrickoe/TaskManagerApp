@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Text.Json.Serialization;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using TaskManagerApp.Pages;
 using TaskManagerApp.Services;
 using TaskManagerApp.ViewModels;
+using System.Reflection;
+
 
 namespace TaskManagerApp
 {
@@ -18,10 +20,17 @@ namespace TaskManagerApp
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+            var basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-#if DEBUG
-    		builder.Logging.AddDebug();
-#endif
+            var config = new ConfigurationBuilder()
+                .AddJsonFile(Path.Combine(basePath!, "appsettings.json"), optional: false, reloadOnChange: true)
+                .Build();
+
+            builder.Configuration.AddConfiguration(config);
+
+            #if DEBUG
+                builder.Logging.AddDebug();
+            #endif
 
             builder.Services.AddHttpClient();
 
