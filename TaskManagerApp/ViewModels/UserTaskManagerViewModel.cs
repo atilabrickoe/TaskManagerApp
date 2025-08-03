@@ -13,28 +13,33 @@ namespace TaskManagerApp.ViewModels
         [ObservableProperty]
         private ObservableCollection<User> users = new();
 
-        [ObservableProperty]
-        private User? selectedUser;
+        private User selectedUser;
+        public User SelectedUser
+        {
+            get => selectedUser;
+            set
+            {
+                if (SetProperty(ref selectedUser, value) && value != null)
+                {
+                    value.Notification = false;
+                    value.MenssageNotification = string.Empty;
+                }
+            }
+        }
 
         private readonly IServiceProvider _serviceProvider;
         private readonly IUserService _userService;
         private readonly ITaskItemService _taskItemService;
-        private readonly INavigationService _navigationService;
-        private readonly IReceiveNotificationService _receiveNotificationService;
 
-        public UserTaskManagerViewModel(IServiceProvider serviceProvider, IUserService userService, ITaskItemService taskItemService, INavigationService navigationService, IReceiveNotificationService receiveNotificationService)
+        public UserTaskManagerViewModel(IServiceProvider serviceProvider, IUserService userService, ITaskItemService taskItemService)
         {
             _userService = userService;
             _taskItemService = taskItemService;
             _serviceProvider = serviceProvider;
-            _navigationService = navigationService;
-            _receiveNotificationService = receiveNotificationService;
-            LoadData();
         }
 
-        private async void LoadData()
+        public async void LoadDataAsync()
         {
-            //await _receiveNotificationService.ReceiveNotificationAsync();
             var userTaskResponse = await _userService.GetAllUsers(true);
 
             if (userTaskResponse.Success)
@@ -77,7 +82,7 @@ namespace TaskManagerApp.ViewModels
         private async Task LogOut()
         {
             SecureStorage.RemoveAll();
-            await _navigationService.NavigationTO(nameof(CreateUserPage));
+            await Shell.Current.GoToAsync($"///{nameof(CreateUserPage)}");
             await Application.Current.MainPage.DisplayAlert("Sucesso", "Log Out realizado com sucesso.", "OK");
         }
         [RelayCommand]
@@ -131,5 +136,21 @@ namespace TaskManagerApp.ViewModels
                 }
             }
         }
+        [RelayCommand]
+        private async Task ShowNotification(User user)
+        {
+            if (user == null) return;
+
+            user.Notification = false;
+
+            var message = user.MenssageNotification;
+            user.MenssageNotification = string.Empty;
+
+
+            var index = Users.IndexOf(user);
+            if (index >= 0)
+                Users[index] = user;
+        }
+
     }
 }

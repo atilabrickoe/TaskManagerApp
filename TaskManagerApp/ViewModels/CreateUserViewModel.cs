@@ -9,6 +9,7 @@ namespace TaskManagerApp.ViewModels
     {
         private readonly IUserService _userService;
         private readonly INavigationService _navigationService;
+        private readonly IServiceProvider _serviceProvider;
 
         [ObservableProperty]
         private string userName = string.Empty;
@@ -16,10 +17,11 @@ namespace TaskManagerApp.ViewModels
         [ObservableProperty]
         private string password = string.Empty;
 
-        public CreateUserViewModel(IUserService userService, INavigationService navigationService)
+        public CreateUserViewModel(IUserService userService, INavigationService navigationService, IServiceProvider serviceProvider)
         {
             _userService = userService;
             _navigationService = navigationService;
+            _serviceProvider = serviceProvider;
         }
 
         [RelayCommand]
@@ -61,6 +63,8 @@ namespace TaskManagerApp.ViewModels
 
                     await Application.Current.MainPage.DisplayAlert("Sucesso", "Usuário logado!", "OK");
 
+                    var vm = _serviceProvider.GetService<UserTaskManagerViewModel>();
+                    vm.LoadDataAsync();
                     await _navigationService.NavigationTO(nameof(UserTaskManagerPage));
                 }
                 else

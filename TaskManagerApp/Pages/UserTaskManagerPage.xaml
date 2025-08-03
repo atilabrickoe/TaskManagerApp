@@ -60,13 +60,13 @@
 
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup Name="CommonStates">
-                                     <!--Normal (not selected)--> 
+                                    <!--Normal (not selected)-->
                                     <VisualState Name="Normal">
                                         <VisualState.Setters>
                                             <Setter Property="BorderColor" Value="Transparent"/>
                                         </VisualState.Setters>
                                     </VisualState>
-                                    
+
                                     <!--Selected-->
                                     <VisualState Name="Selected">
                                         <VisualState.Setters>
@@ -76,10 +76,46 @@
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
 
-                            <Label Text="{Binding UserName}"
-                                   FontSize="16"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center"/>
+                            <VerticalStackLayout>
+                                <Label Text="{Binding UserName}"
+                                       FontSize="16"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       ToolTipProperties.Text="{Binding MenssageNotification}">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Notification}" Value="True">
+                                            <Setter Property="TextColor" Value="Green" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Notification}" Value="False">
+                                            <Setter Property="TextColor" Value="White" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+                                <!--<Label Text="{Binding UserName}"
+                                       FontSize="16"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+
+                                --><!--Show the notification message only if Notification == true--><!--
+                                <Frame IsVisible="{Binding Notification}"
+                                       WidthRequest="20"
+                                       HeightRequest="20"
+                                       CornerRadius="10"
+                                       BackgroundColor="Green"
+                                       HorizontalOptions="Start"
+                                       VerticalOptions="Start"
+                                       ToolTipProperties.Text="{Binding MenssageNotification}">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                                    Command="{Binding BindingContext.ShowNotificationCommand,
+                                                                      Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                                    CommandParameter="{Binding .}" />
+
+                                    </Frame.GestureRecognizers>
+                                </Frame>-->
+
+                            </VerticalStackLayout>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
