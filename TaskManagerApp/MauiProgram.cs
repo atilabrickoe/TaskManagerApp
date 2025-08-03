@@ -30,6 +30,7 @@ namespace TaskManagerApp
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITaskItemService, TaskItemService>();
             builder.Services.AddTransient<INavigationService, NavigationService>();
+            builder.Services.AddTransient<IReceiveNotificationService, ReceiveNotificationService>();
             builder.Services.AddTransient(typeof(IHandleApiResponseService<>), typeof(HandleApiResponseService<>));
 
             // Register view + viewmodel

@@ -20,23 +20,25 @@ namespace TaskManagerApp.ViewModels
         private readonly IUserService _userService;
         private readonly ITaskItemService _taskItemService;
         private readonly INavigationService _navigationService;
+        private readonly IReceiveNotificationService _receiveNotificationService;
 
-        public UserTaskManagerViewModel(IServiceProvider serviceProvider, IUserService userService, ITaskItemService taskItemService, INavigationService navigationService)
+        public UserTaskManagerViewModel(IServiceProvider serviceProvider, IUserService userService, ITaskItemService taskItemService, INavigationService navigationService, IReceiveNotificationService receiveNotificationService)
         {
             _userService = userService;
             _taskItemService = taskItemService;
             _serviceProvider = serviceProvider;
-            LoadData();
             _navigationService = navigationService;
+            _receiveNotificationService = receiveNotificationService;
+            LoadData();
         }
 
         private async void LoadData()
         {
+            await _receiveNotificationService.ReceiveNotificationAsync();
             var userTaskResponse = await _userService.GetAllUsers(true);
 
             if (userTaskResponse.Success)
             {
-
                 Users = new ObservableCollection<User>(userTaskResponse.Data);
             }
             else
