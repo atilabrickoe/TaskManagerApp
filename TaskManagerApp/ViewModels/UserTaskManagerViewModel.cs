@@ -34,7 +34,7 @@ namespace TaskManagerApp.ViewModels
 
         private async void LoadData()
         {
-            await _receiveNotificationService.ReceiveNotificationAsync();
+            //await _receiveNotificationService.ReceiveNotificationAsync();
             var userTaskResponse = await _userService.GetAllUsers(true);
 
             if (userTaskResponse.Success)

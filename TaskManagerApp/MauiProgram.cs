@@ -32,6 +32,7 @@ namespace TaskManagerApp
             builder.Services.AddTransient<INavigationService, NavigationService>();
             builder.Services.AddTransient<IReceiveNotificationService, ReceiveNotificationService>();
             builder.Services.AddTransient(typeof(IHandleApiResponseService<>), typeof(HandleApiResponseService<>));
+            builder.Services.AddSingleton<RabbitMqListenerService>();
 
             // Register view + viewmodel
             builder.Services.AddTransient<CreateUserViewModel>();

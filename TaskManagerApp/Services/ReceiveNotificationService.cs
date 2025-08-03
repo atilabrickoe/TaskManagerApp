@@ -21,9 +21,7 @@ namespace TaskManagerApp.Services
         {
             using var connection = await _factory.CreateConnectionAsync();
             using var channel = await connection.CreateChannelAsync();
-            await channel.QueueDeclareAsync(queue: "TaskManagerQueue", durable: false, exclusive: false, autoDelete: false,
-
-                arguments: null);
+            await channel.QueueDeclareAsync(queue: "TaskManagerQueue", durable: false, exclusive: false, autoDelete: false, arguments: null);
 
 
             var consumer = new AsyncEventingBasicConsumer(channel);
