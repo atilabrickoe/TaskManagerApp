@@ -151,7 +151,7 @@ namespace TaskManagerApp.ViewModels
                 var result = await _taskItemService.DeleteTaskByIdAsync(taskItem.Id);
                 if (result.Success)
                 {
-                    Users.FirstOrDefault(u => u.Id == SelectedUser.Id)?.Tasks.Remove(taskItem);
+                    Users.FirstOrDefault(u => u.Id == taskItem.IdUser)?.Tasks.Remove(taskItem);
                     await Application.Current.MainPage.DisplayAlert("Sucesso", "Tarefa deletada com sucesso.", "OK");
                 }
                 else

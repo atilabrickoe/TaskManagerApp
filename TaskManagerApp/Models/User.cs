@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace TaskManagerApp.Models
         [ObservableProperty]
         private string menssageNotification = string.Empty;
 
-        public List<TaskItem> Tasks { get; set; } = new();
+        [ObservableProperty]
+        private ObservableCollection<TaskItem> tasks = new();
     }
 }
